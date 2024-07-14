@@ -1,7 +1,17 @@
 ;
 ; bootsector.asm
-; Createa a bootsector binary which we can use to boot from :)
+; Prints a single character to the screen
 ;
+    ;------------------------------------------------------------------
+    ; Print a Character
+    ;------------------------------------------------------------------
+    mov ah, 0x0e                    ; ah 0x0e = tele-type
+    mov al, 'P'                     ; move a 'P' into AL register
+    int 0x10                        ; call interrupt 0x10 to display the character in AL
+
+    ;------------------------------------------------------------------
+    ; Bootloader End
+    ;------------------------------------------------------------------
 
     cli                             ; disable interrupts
     hlt                             ; halt the system
