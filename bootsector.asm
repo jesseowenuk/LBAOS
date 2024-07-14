@@ -3,11 +3,15 @@
 ; Prints a single character to the screen
 ;
     ;------------------------------------------------------------------
-    ; Print a Character
+    ; Bootsector is loaded at 0x7C00
     ;------------------------------------------------------------------
-    mov ah, 0x0e                    ; ah 0x0e = tele-type
-    mov al, 'P'                     ; move a 'P' into AL register
-    int 0x10                        ; call interrupt 0x10 to display the character in AL
+    org 0x7C00
+
+    ;------------------------------------------------------------------
+    ; Print a Subscribe Message :)
+    ;------------------------------------------------------------------
+    mov si, subscribe_message
+    call print_string
 
     ;------------------------------------------------------------------
     ; Bootloader End
@@ -15,6 +19,17 @@
 
     cli                             ; disable interrupts
     hlt                             ; halt the system
+
+    ;------------------------------------------------------------------
+    ; Helpful includes
+    ;------------------------------------------------------------------
+    %include "print_string.asm" 
+
+    ;------------------------------------------------------------------
+    ; Data
+    ;------------------------------------------------------------------
+subscribe_message:
+    db 'Please subscribe! Thank you, kindly :)', 13, 10, 0
 
     ;-----------------------------------------------------------------
     ; Magic Number and padding
