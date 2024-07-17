@@ -1,16 +1,13 @@
 ;
-; bootsector.asm
-; Prints a single character to the screen
+; kernel.asm
+; Simple file which prints out a mesage - will be loaded by the boot sector code.
 ;
-    ;------------------------------------------------------------------
-    ; Bootsector is loaded at 0x7C00
-    ;------------------------------------------------------------------
-    org 0x7C00
 
     ;------------------------------------------------------------------
     ; Print a Subscribe Message :)
     ;------------------------------------------------------------------
-    
+    mov si, hello_message
+    call print_string
 
     ;------------------------------------------------------------------
     ; Bootloader End
@@ -27,10 +24,10 @@
     ;------------------------------------------------------------------
     ; Data
     ;------------------------------------------------------------------
-
+hello_message:
+    db 'Hello LBAOS!)', 13, 10, 0
 
     ;-----------------------------------------------------------------
     ; Magic Number and padding
     ;-----------------------------------------------------------------
-    times 510 - ($-$$) db 0         ; pad out the file with 0's to 510
-    dw 0xAA55                       ; the magic number!!!
+    times 512 - ($-$$) db 0         ; pad out the file with 0's to 512
