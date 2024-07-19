@@ -8,13 +8,13 @@ rm *.bin
 echo "Assembling the Bootsector..."
 nasm -f bin -o bootsector.bin bootsector.asm
 
-# assemble the kernel
-echo "Assembling the Kernel..."
-nasm -f bin -o kernel.bin kernel.asm
+# assemble stage 2
+echo "Assembling stage 2..."
+nasm -f bin -o stage2.bin stage2.asm
 
 # join the files together
 echo "Joining the files together.."
-cat bootsector.bin kernel.bin > LBAOS.bin
+cat bootsector.bin stage2.bin > LBAOS.bin
 
 # lets send it!
 echo "Sending it...."
