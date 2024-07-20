@@ -18,4 +18,4 @@ cat bootsector.bin stage2.bin > LBAOS.bin
 
 # lets send it!
 echo "Sending it...."
-qemu-system-i386 -fda LBAOS.bin
+qemu-system-i386 -fda LBAOS.bin -monitor stdio

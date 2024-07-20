@@ -12,6 +12,13 @@
     mov sp, ax                      ; point our stack poinuter at our new location in memory
 
     ;------------------------------------------------------------------
+    ; Load the GDT
+    ;------------------------------------------------------------------
+    cli                             ; disable interrupts whilst we load the GDT
+    lgdt [gdt_descriptor]           ; load up our GDT into the GDT register
+    sti                             ; renable interrupts
+
+    ;------------------------------------------------------------------
     ; Print a Hello Message :)
     ;------------------------------------------------------------------
     mov si, hello_message
@@ -28,6 +35,36 @@
     ; Helpful includes
     ;------------------------------------------------------------------
     %include "print_string.asm" 
+
+    ;------------------------------------------------------------------
+    ; GDT
+    ;------------------------------------------------------------------
+gdt:
+
+gdt_null:                           ; null segment
+    dq 0                            ; define 8 bytes with 0 (required)
+
+gdt_code:
+    dw 0xFFFF                       ; limit low (max address for our segment)
+    dw 0                            ; base low 
+    db 0                            ; base middle
+    db 10011010b                    ; Access byte 
+    db 11001111b                    ; Granularity byte
+    db 0                            ; last part of the base address
+
+gdt_data:
+    dw 0xFFFF                       ; segment limit
+    dw 0                            ; base address
+    db 0                            ; base middle
+    db 10010010b                    ; Access byte
+    db 11001111b                    ; Granularity byte
+    db 0                            ; last part of the base address
+
+gdt_end:
+
+gdt_descriptor:
+    db gdt_end - gdt
+    dw gdt
 
     ;------------------------------------------------------------------
     ; Data
