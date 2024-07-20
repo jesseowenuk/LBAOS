@@ -30,6 +30,16 @@
     call enable_a20
 
     ;------------------------------------------------------------------
+    ; Enter protected mode
+    ;------------------------------------------------------------------
+    cli                             ; clear interrupts
+    mov eax, cr0                    ; move the contents of the cr0 register into the EAX register
+    or eax, 1                       ; set bit 0 by or'ing EAX register with 1
+    mov cr0, eax                    ; move contents of EAX register back onto CR0 (this changes the protected mode bit to set - sending us head first into protected mode)
+
+    jmp 0x8:clear_pipe              ; do a far jump to a code segment to clear the 16-bit garbage instructions
+
+    ;------------------------------------------------------------------
     ; Bootloader End
     ;------------------------------------------------------------------
 
@@ -69,7 +79,7 @@ gdt_data:
 gdt_end:
 
 gdt_descriptor:
-    db gdt_end - gdt
+    db gdt_end - gdt - 1
     dw gdt
 
     ;------------------------------------------------------------------
@@ -82,3 +92,13 @@ hello_message:
     ; Magic Number and padding
     ;-----------------------------------------------------------------
     times 512 - ($-$$) db 0         ; pad out the file with 0's to 512
+
+    ;------------------------------------------------------------------
+    ; 32-bit Protected Mode
+    ;------------------------------------------------------------------
+
+[bits 32]                           ; instructions are now in 32-bit
+clear_pipe:
+
+
+ 
